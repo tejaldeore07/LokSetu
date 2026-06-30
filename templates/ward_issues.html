@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOKSETU - Ward Issues</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#142a3b;background:radial-gradient(800px 500px at 5% 0%,rgba(23,183,214,.16),transparent 60%),linear-gradient(180deg,#f7fbff,#fff8ea);min-height:100vh}.wrap{width:min(1120px,calc(100% - 32px));margin:0 auto;padding:28px 0}.hero{background:linear-gradient(135deg,#061f35,#1269aa);color:#fff;border-radius:22px;padding:28px;border-bottom:7px solid #1f9d63}.hero h1{margin:0;font-size:38px}.hero p{color:#d8e9f4;font-weight:800;line-height:1.5}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.btn,a.btn,button{border:0;border-radius:12px;padding:12px 16px;font-weight:900;text-decoration:none;cursor:pointer}.btn{display:inline-block;background:#f2a340;color:#142a3b}button{width:100%;background:#1f9d63;color:#fff}.flash{margin-top:14px;background:#fff8e8;border:1px solid #f2d39a;color:#8a5200;border-radius:12px;padding:12px 14px;font-weight:900}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:18px}.card{background:#fff;border:1px solid #dbe5ec;border-radius:16px;overflow:hidden;box-shadow:0 16px 38px rgba(6,31,53,.1)}.media{width:100%;height:210px;object-fit:cover;background:#061f35}.body{padding:16px}.tag{display:inline-block;border-radius:999px;background:#eaf2f8;color:#061f35;font-weight:900;padding:7px 11px}.desc{line-height:1.5;color:#344856;margin:12px 0}.mini{font-size:13px;color:#61727e;font-weight:800;margin:6px 0 12px}.empty{margin-top:18px;background:#fff;border:1px dashed #9ab6c9;border-radius:16px;padding:24px;text-align:center;color:#61727e;font-weight:900}@media(max-width:900px){.grid{grid-template-columns:1fr 1fr}}@media(max-width:620px){.grid{grid-template-columns:1fr}.hero h1{font-size:31px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <h1>Issues in Your Ward</h1>
+      <p>{% if area_label != 'Location pending' %}Showing reports only from {{ area_label }} so nearby citizens can verify genuine local problems.{% else %}Allow location access to see only reports from your ward/area.{% endif %}</p>
+      <div class="actions">
+        <a class="btn" href="{{ url_for('home') }}">Submit Report</a>
+        <a class="btn" href="{{ url_for('track') }}">Track Report</a>
+      </div>
+    </section>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}<div class="flash">{{ message }}</div>{% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if area_label == 'Location pending' %}
+      <div class="empty">Location is needed for ward-only verification. Please open this page from the homepage and allow location permission.</div>
+    {% elif reports %}
+      <section class="grid">
+        {% for report in reports %}
+          <article class="card">
+            {% if report.media_type == 'video' %}
+              <video class="media" controls preload="metadata" src="{{ media_url(report.image_path) }}"></video>
+            {% else %}
+              <img class="media" src="{{ media_url(report.image_path) }}" alt="Issue photo">
+            {% endif %}
+            <div class="body">
+              <span class="tag">{{ report.category }}</span>
+              <p class="desc">{{ report.description }}</p>
+              <div class="mini">{{ report.area_label }} · {{ report.verification_count or 0 }} verified</div>
+              <form action="{{ url_for('verify_report', id=report.id) }}" method="POST">
+                <input type="hidden" name="latitude" value="{{ latitude }}">
+                <input type="hidden" name="longitude" value="{{ longitude }}">
+                <button type="submit">Verify This Local Issue</button>
+              </form>
+            </div>
+          </article>
+        {% endfor %}
+      </section>
+    {% else %}
+      <div class="empty">No open reports are waiting for verification in {{ area_label }} right now.</div>
+    {% endif %}
+  </main>
+</body>
+</html>

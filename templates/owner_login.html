@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOKSETU - Owner Login</title>
+  <style>
+    *{box-sizing:border-box} body{margin:0;min-height:100vh;font-family:Arial,Helvetica,sans-serif;color:#142a3b;background:linear-gradient(135deg,#f7fbff,#fff8ea);display:grid;place-items:center;padding:24px}.card{width:min(520px,100%);background:#fff;border:1px solid #dbe5ec;border-radius:20px;box-shadow:0 24px 60px rgba(8,43,71,.2);overflow:hidden}.head{padding:28px;background:linear-gradient(135deg,#082b47,#1669a8);color:#fff;border-bottom:5px solid #f2a340;display:flex;gap:18px;align-items:center}.logo{width:92px;height:92px;border-radius:50%;background:#fff;object-fit:contain;padding:5px}h1{margin:0;font-size:30px}.sub{margin-top:6px;color:#cfe1ee;font-weight:800}.body{padding:28px}label{display:block;font-weight:900;margin-bottom:10px;color:#082b47}input{width:100%;padding:14px;border:1px solid #cbd9e2;border-radius:12px;font:inherit}button,a{border:0;border-radius:12px;padding:13px 18px;font-weight:900;text-decoration:none;display:inline-flex;justify-content:center;align-items:center;min-height:50px}button{width:100%;margin-top:16px;background:#1669a8;color:#fff;cursor:pointer}a{margin-top:12px;width:100%;background:#f2a340;color:#142a3b}.flash{background:#ffecec;color:#b42318;border:1px solid #ffc5c0;border-radius:12px;padding:12px;margin-bottom:14px;font-weight:800}.hint{margin-top:14px;color:#60717d;line-height:1.5;font-size:14px}
+  </style>
+</head>
+<body>
+  <section class="card">
+    <div class="head"><img class="logo" src="{{ url_for('static', filename='loksetu-logo.png') }}" alt="LOKSETU logo"><div><h1>Owner Login</h1><div class="sub">Private dashboard access</div></div></div>
+    <div class="body">
+      {% with messages = get_flashed_messages() %}{% if messages %}<div class="flash">{{ messages[0] }}</div>{% endif %}{% endwith %}
+      <form method="POST">
+        <label for="password">Owner password</label>
+        <input id="password" name="password" type="password" placeholder="Enter owner password" required autofocus>
+        <button type="submit">Open Dashboard</button>
+      </form>
+      <a href="{{ url_for('home') }}">Back to public portal</a>
+      <p class="hint">Default local password is <strong>tejal07</strong>. You can change it in <strong>.env</strong> using <strong>LOKSETU_ADMIN_PASSWORD</strong>.</p>
+    </div>
+  </section>
+</body>
+</html>

@@ -1,0 +1,20 @@
+.gcloudignore
+.git
+.gitignore
+.env
+API KEY.docx
+venv/
+__pycache__/
+*.pyc
+uploads/
+test_vision.py
+vision_test.py
+check_db.py
+Screenshot*
+air pollution.jpg
+broken bench.jpg
+fallen tree.jpg
+garbage.jpg
+pathhole.jpg
+shirt.jpg
+traffic.jpg

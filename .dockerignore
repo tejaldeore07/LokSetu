@@ -1,0 +1,12 @@
+.env
+API KEY.docx
+venv
+__pycache__
+*.pyc
+uploads
+*.jpg
+*.png
+test_vision.py
+vision_test.py
+check_db.py
+Screenshot*
